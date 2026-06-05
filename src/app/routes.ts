@@ -114,6 +114,11 @@ if (import.meta.env.DEV) {
 }
 const tree = buildRouteTree(__dirname);
 const notFound = route('*?', './__create/not-found.tsx');
-const routes = [...generateRoutes(tree), notFound];
+const routes = [
+  ...generateRoutes(tree),
+  route('/api/*', './hono-handler.ts', { id: 'api-catchall' }),
+  route('/integrations/*', './hono-handler.ts', { id: 'integrations-catchall' }),
+  notFound
+];
 
 export default routes;
