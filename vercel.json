@@ -1,0 +1,8 @@
+{
+  "build": {
+    "env": {
+      "PUPPETEER_SKIP_DOWNLOAD": "true"
+    }
+  },
+  "installCommand": "npm install --legacy-peer-deps"
+}

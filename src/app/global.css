@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  /* Purple Theme (Light Mode Default) */
+  --primary-50: #faf5ff;
+  --primary-100: #f3e8ff;
+  --primary-200: #e9d5ff;
+  --primary-300: #d8b4fe;
+  --primary-400: #c084fc;
+  --primary-500: #490B91; /* Exact color match to the purple logo if possible, using typical vibrant purple */
+  --primary-600: #3b0978;
+  --primary-700: #2c065a;
+  --primary-800: #1e043d;
+  --primary-900: #0f021f;
+}
+
+.dark {
+  /* Yellow Theme (Dark Mode Default) */
+  --primary-50: #fefce8;
+  --primary-100: #fef9c3;
+  --primary-200: #fef08a;
+  --primary-300: #fde047;
+  --primary-400: #facc15;
+  --primary-500: #FFCC00; /* Yellow logo match */
+  --primary-600: #ca8a04;
+  --primary-700: #a16207;
+  --primary-800: #854d0e;
+  --primary-900: #713f12;
+}
+
+@layer base {
+  input, textarea, select, button {
+    @apply outline-none focus:outline-none;
+  }
+}
+
+body {
+  position: relative;
+  z-index: 0;
+  @apply bg-white dark:bg-gray-950;
+}
+
+body::before, body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.1;
+  animation: float 15s infinite ease-in-out alternate;
+  pointer-events: none;
+}
+.dark body::before, .dark body::after {
+  opacity: 0.15;
+}
+
+body::before {
+  top: -15%;
+  left: -15%;
+  width: 50vw;
+  height: 50vw;
+  background: var(--primary-500);
+}
+
+body::after {
+  bottom: -15%;
+  right: -15%;
+  width: 60vw;
+  height: 60vw;
+  background: var(--primary-400);
+  animation-delay: -7s;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(10%, 10%) scale(1.1); }
+}
+
+/* Fix browser autofill colors for Light/Dark mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #f9fafb inset !important; /* bg-gray-50 */
+    -webkit-text-fill-color: #111827 !important; /* text-gray-900 */
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover, 
+.dark input:-webkit-autofill:focus, 
+.dark input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #1f2937 inset !important; /* bg-gray-800 */
+    -webkit-text-fill-color: #f9fafb !important; /* text-gray-50 */
+}
+
+/* Hide native browser password reveal icons to prevent duplicates with custom ones */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+input::-webkit-reveal {
+    display: none;
+}

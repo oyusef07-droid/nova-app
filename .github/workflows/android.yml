@@ -1,0 +1,64 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Install dependencies, Build App & Sync Capacitor
+        run: |
+          npm install --legacy-peer-deps
+          npm run build:android
+          npx cap sync android
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./android/gradlew
+
+      - name: Build debug APK, release APK, and release AAB
+        working-directory: ./android
+        run: ./gradlew assembleDebug assembleRelease bundleRelease --no-daemon
+
+      - name: Generate Keystore and Sign AAB and APK
+        working-directory: ./android
+        run: |
+          keytool -genkey -v -keystore nova-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias nova -storepass nova123456 -keypass nova123456 -dname "CN=Nova, OU=Nova, O=Nova, L=Unknown, S=Unknown, C=EG"
+          
+          # Sign AAB with jarsigner (recommended by Google for AAB)
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore nova-release.jks -storepass nova123456 -keypass nova123456 app/build/outputs/bundle/release/app-release.aab nova
+          
+          # Sign APK with apksigner (v2/v3 signatures required for modern Android)
+          BUILD_TOOLS=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          $BUILD_TOOLS/apksigner sign --ks nova-release.jks --ks-pass pass:nova123456 --key-pass pass:nova123456 --out app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/app-release-unsigned.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload Google Play Release Files
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-stores-release
+          path: |
+            android/app/build/outputs/bundle/release/app-release.aab
+            android/app/build/outputs/apk/release/app-release.apk
+            android/nova-release.jks
