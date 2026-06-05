@@ -1,23 +1,6 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "server-entry.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": "build/client/**"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/build/client/assets/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/server-entry.js"
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/server" }
   ],
   "installCommand": "npm install --legacy-peer-deps"
 }
