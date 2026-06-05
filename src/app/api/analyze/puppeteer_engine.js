@@ -1,9 +1,16 @@
-import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-
-puppeteer.use(StealthPlugin());
+let puppeteer = null;
 
 export async function scrapeMovieSite(url) {
+  if (!puppeteer) {
+    try {
+      puppeteer = (await import('puppeteer-extra')).default;
+      const StealthPlugin = (await import('puppeteer-extra-plugin-stealth')).default;
+      puppeteer.use(StealthPlugin());
+    } catch(e) {
+      console.error("Puppeteer init error:", e);
+      throw new Error("متصفح الكروم المخفي غير مدعوم على هذه الاستضافة المجانية (Vercel). يرجى ربط حساب Browserless.io");
+    }
+  }
   let browser = null;
   try {
     const apiKey = process.env.BROWSERLESS_API_KEY;
