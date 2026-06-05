@@ -1,7 +1,4 @@
-import server from '../build/server/index.js';
+import { handle } from 'hono/vercel';
+import app from '../build/server/index.js';
 
-process.env.PORT = '0';
-
-export default function handler(req, res) {
-  server.emit('request', req, res);
-}
+export default handle(app);
