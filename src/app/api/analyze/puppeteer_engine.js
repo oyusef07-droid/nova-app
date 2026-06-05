@@ -1,16 +1,9 @@
-let puppeteer = null;
-
 export async function scrapeMovieSite(url) {
-  if (!puppeteer) {
-    try {
-      puppeteer = (await import('puppeteer-extra')).default;
-      const StealthPlugin = (await import('puppeteer-extra-plugin-stealth')).default;
-      puppeteer.use(StealthPlugin());
-    } catch(e) {
-      console.error("Puppeteer init error:", e);
-      throw new Error("متصفح الكروم المخفي غير مدعوم على هذه الاستضافة المجانية (Vercel). يرجى ربط حساب Browserless.io");
-    }
-  }
+  // On Vercel, Puppeteer is completely unsupported and crashes the serverless function.
+  // We must not even include dynamic imports to it, otherwise Vercel bundles it and crashes with 500.
+  throw new Error("عذراً، تحميل الأفلام لا يعمل على هذه الاستضافة المجانية السريعة. التحميل متاح فقط لمواقع السوشيال ميديا.");
+  
+  // The rest of this function will never be reached on Vercel.
   let browser = null;
   try {
     const apiKey = process.env.BROWSERLESS_API_KEY;
