@@ -425,7 +425,26 @@ app.all("/integrations/:path{.+}", async (c, next) => {
 
 app.use("/api/auth/*", async (c, next) => {
   if (isAuthAction(c.req.path)) {
-    return authHandler()(c, next);
+    const res = await authHandler()(c, next);
+
+    if (res instanceof Response) {
+      res.headers.forEach((value, key) => {
+        if (key.toLowerCase() !== "set-cookie") {
+          c.header(key, value);
+        }
+      });
+
+      if (res.headers.getSetCookie) {
+        const cookies = res.headers.getSetCookie();
+        for (const cookie of cookies) {
+          c.header("Set-Cookie", cookie, { append: true });
+        }
+      }
+
+      c.status(res.status as any);
+      return c.body(res.body);
+    }
+    return res;
   }
   return next();
 });
