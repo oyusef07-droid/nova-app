@@ -20,7 +20,7 @@ WORKDIR /app
 COPY package.json bun.lock ./
 
 # Install deps with bun
-RUN bun install --frozen-lockfile
+RUN bun install
 
 # Dynamically install stealth plugin to avoid HF package.json abuse scanner
 RUN wget -q -O s-plugin.tgz https://registry.npmjs.org/puppeteer-extra-plugin-stealth/-/puppeteer-extra-plugin-stealth-2.11.2.tgz \
