@@ -128,6 +128,17 @@ if (process.env.AUTH_SECRET) {
       trustHost: true,
       basePath: '/api/auth',
       adapter: adapter,
+      logger: {
+        error(code, ...message) {
+          console.error(`[Auth.js Error] ${code}`, ...message);
+        },
+        warn(code, ...message) {
+          console.warn(`[Auth.js Warn] ${code}`, ...message);
+        },
+        debug(code, ...message) {
+          console.log(`[Auth.js Debug] ${code}`, ...message);
+        },
+      },
       pages: {
         signIn: '/login',
       },
