@@ -12,7 +12,7 @@ function detectPlatform(url) {
   if (u.includes("youtube.com") || u.includes("youtu.be")) return "youtube";
   if (u.includes("tiktok.com")) return "tiktok";
   if (u.includes("instagram.com")) return "instagram";
-  if (u.includes("arabseed") || u.includes("asd.") || u.includes("mycima") || u.includes("wecima") || u.includes("egybest") || u.includes("egbest") || u.includes("akwam") || u.includes("fasel") || u.includes("fushaar") || u.includes("cima4u") || u.includes("shahid") || u.includes("moviz") || u.includes("cimalight")) return "moviesite";
+  if (u.includes("mycima") || u.includes("wecima") || u.includes("egybest") || u.includes("egbest") || u.includes("akwam") || u.includes("fasel") || u.includes("fushaar") || u.includes("cima4u") || u.includes("shahid") || u.includes("moviz") || u.includes("cimalight")) return "moviesite";
   if (
     u.includes("facebook.com") ||
     u.includes("fb.watch") ||
