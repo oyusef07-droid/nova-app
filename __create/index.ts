@@ -12,7 +12,6 @@ import { cors } from 'hono/cors';
 import { proxy } from 'hono/proxy';
 import { bodyLimit } from 'hono/body-limit';
 import { requestId } from 'hono/request-id';
-import { createHonoServer } from 'react-router-hono-server/node';
 import { serializeError } from 'serialize-error';
 import ws from 'ws';
 import NeonAdapter from './adapter';
@@ -386,7 +385,4 @@ app.use('/api/auth/*', async (c, next) => {
 });
 app.route(API_BASENAME, api);
 
-export default await createHonoServer({
-  app,
-  defaultLogger: false,
-});
+export default app;
