@@ -137,9 +137,13 @@ if (process.env.AUTH_SECRET) {
       logger: {
         error(code, ...message) {
           lastAuthError = {
-            code: code?.message || code?.name || code,
+            name: code?.name,
+            message: code?.message,
             stack: code?.stack,
-            message,
+            cause: code?.cause,
+            causeMessage: code?.cause?.err?.message || code?.cause?.message,
+            causeStack: code?.cause?.err?.stack || code?.cause?.stack,
+            extraMessage: message,
           };
           console.error(`[Auth.js Error]`, code, ...message);
         },
