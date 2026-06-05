@@ -124,7 +124,7 @@ if (process.env.AUTH_SECRET) {
   app.use(
     '*',
     initAuthConfig((c) => ({
-      secret: c.env.AUTH_SECRET,
+      secret: process.env.AUTH_SECRET,
       trustHost: true,
       basePath: '/api/auth',
       adapter: adapter,
