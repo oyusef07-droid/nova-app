@@ -63,8 +63,8 @@ export async function scrapeMovieSite(url) {
           
           if (!href || !href.startsWith('http')) return;
           
-          // Exclude any link with text longer than 30 characters (definitely not a button)
-          if (text.length > 30) return;
+          // Exclude any link with text longer than 80 characters (definitely not a button)
+          if (text.length > 80) return;
           
           // Exclude common navigation keywords in URLs to filter out garbage
           const badUrlKeywords = ['tag', 'category', 'genre', 'year', 'all-movies', 'faq', 'contact', 'dmca', 'login', 'register', 'promo', 'top_views', 'recent'];
@@ -80,11 +80,13 @@ export async function scrapeMovieSite(url) {
           const isHosterLink = hosters.some(h => href.includes(h));
           // 2. Is it an Arabseed encoded redirect link?
           const isArabseedRedirect = href.includes('/l/');
-          // 3. Does the TEXT say download or a quality?
+          // 3. Is it an internal link to the actual download page?
+          const isInternalDownload = href.includes(currentHost) && (href.includes('/download') || href.includes('download.php'));
+          // 4. Does the TEXT say download or a quality?
           const isDownloadText = text.includes('تحميل') || text.includes('download') || text.includes('سيرفر') || text.match(/(1080|720|480|360|240)(p)?/i) || text.includes('sd') || text.includes('hd');
           
           // If it matches ANY of our valid criteria
-          if (isHosterLink || isArabseedRedirect || (isDownloadText && !href.includes(currentHost))) {
+          if (isHosterLink || isArabseedRedirect || isInternalDownload || (isDownloadText && !href.includes(currentHost))) {
              // Avoid social media sharing links
              if (!href.includes('facebook.com') && !href.includes('twitter.com') && !href.includes('telegram.me') && !href.includes('google.com/store')) {
                  links.push({ url: a.href, text: a.innerText.trim() });
