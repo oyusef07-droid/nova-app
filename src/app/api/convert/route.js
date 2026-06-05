@@ -4,6 +4,8 @@ import os from 'os';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
+import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
+
 const execAsync = promisify(exec);
 
 export async function POST(req) {
@@ -43,7 +45,7 @@ export async function POST(req) {
 
     try {
       // Extract audio with ffmpeg. Added -loglevel error to prevent maxBuffer limits in exec
-      await execAsync(`ffmpeg -loglevel error -y -i "${inputPath}" -vn -ar 44100 -ac 2 -b:a 128k "${outputPath}"`);
+      await execAsync(`"${ffmpegInstaller.path}" -loglevel error -y -i "${inputPath}" -vn -ar 44100 -ac 2 -b:a 128k "${outputPath}"`);
     } catch (ffmpegErr) {
       console.error('FFmpeg error:', ffmpegErr);
       try { fs.unlinkSync(inputPath); } catch(e) {}
