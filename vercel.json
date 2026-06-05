@@ -1,7 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index" },
-    { "source": "/integrations/(.*)", "destination": "/api/index" }
+    { "source": "/integrations/(.*)", "destination": "/api/integrations/$1" }
   ],
   "installCommand": "npm install --legacy-peer-deps"
 }
