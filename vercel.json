@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "build/server/index.js",
+      "src": "server-entry.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": "build/client/**"
@@ -16,7 +16,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/build/server/index.js"
+      "dest": "/server-entry.js"
     }
   ],
   "installCommand": "npm install --legacy-peer-deps"
